@@ -1,42 +1,42 @@
-﻿using Northwind.Application.Products.Commands.CreateProduct;
+﻿using System.Net.Http;
+using Northwind.Application.Products.Commands.CreateProduct;
 using Northwind.WebUI.IntegrationTests.Common;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Northwind.WebUI.IntegrationTests.Controllers.Products
+namespace Northwind.WebUI.IntegrationTests.Controllers.Products;
+
+public class Create : IClassFixture<CustomWebApplicationFactory<Startup>>
 {
-    public class Create : IClassFixture<CustomWebApplicationFactory<Startup>>
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+
+    public Create(CustomWebApplicationFactory<Startup> factory)
     {
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        _factory = factory;
+    }
 
-        public Create(CustomWebApplicationFactory<Startup> factory)
+    [Fact]
+    public async Task GivenCreateProductCommand_ReturnsNewProductId()
+    {
+        HttpClient client = await _factory.GetAuthenticatedClientAsync();
+
+        CreateProductCommand command = new CreateProductCommand
         {
-            _factory = factory;
-        }
+            ProductName = "Coffee",
+            SupplierId = 1,
+            CategoryId = 1,
+            UnitPrice = 19.00m,
+            Discontinued = false
+        };
 
-        [Fact]
-        public async Task GivenCreateProductCommand_ReturnsNewProductId()
-        {
-            var client = await _factory.GetAuthenticatedClientAsync();
+        StringContent content = Utilities.GetRequestContent(command);
 
-            var command = new CreateProductCommand
-            {
-                ProductName = "Coffee",
-                SupplierId = 1,
-                CategoryId = 1,
-                UnitPrice = 19.00m,
-                Discontinued = false
-            };
+        HttpResponseMessage response = await client.PostAsync($"/api/products/create", content);
 
-            var content = Utilities.GetRequestContent(command);
+        response.EnsureSuccessStatusCode();
 
-            var response = await client.PostAsync($"/api/products/create", content);
+        int productId = await Utilities.GetResponseContent<int>(response);
 
-            response.EnsureSuccessStatusCode();
-
-            var productId = await Utilities.GetResponseContent<int>(response);
-
-            Assert.NotEqual(0, productId);
-        }
+        Assert.NotEqual(0, productId);
     }
 }

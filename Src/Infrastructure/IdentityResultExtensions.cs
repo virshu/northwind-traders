@@ -2,15 +2,14 @@
 using Northwind.Application.Common.Models;
 using System.Linq;
 
-namespace Northwind.Infrastructure
+namespace Northwind.Infrastructure;
+
+public static class IdentityResultExtensions
 {
-    public static class IdentityResultExtensions
+    public static Result ToApplicationResult(this IdentityResult result)
     {
-        public static Result ToApplicationResult(this IdentityResult result)
-        {
-            return result.Succeeded
-                ? Result.Success()
-                : Result.Failure(result.Errors.Select(e => e.Description));
-        }
+        return result.Succeeded
+            ? Result.Success()
+            : Result.Failure(result.Errors.Select(e => e.Description));
     }
 }

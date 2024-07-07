@@ -4,20 +4,19 @@ using CsvHelper;
 using Northwind.Application.Common.Interfaces;
 using Northwind.Application.Products.Queries.GetProductsFile;
 
-namespace Northwind.Infrastructure.Files
-{
-    public class CsvFileBuilder : ICsvFileBuilder
-    {
-        public byte[] BuildProductsFile(IEnumerable<ProductRecordDto> records)
-        {
-            using var memoryStream = new MemoryStream();
-            using (var streamWriter = new StreamWriter(memoryStream))
-            {
-                using var csvWriter = new CsvWriter(streamWriter, System.Globalization.CultureInfo.CurrentCulture);
-                csvWriter.WriteRecords(records);
-            }
+namespace Northwind.Infrastructure.Files;
 
-            return memoryStream.ToArray();
+public class CsvFileBuilder : ICsvFileBuilder
+{
+    public byte[] BuildProductsFile(IEnumerable<ProductRecordDto> records)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+        {
+            using CsvWriter csvWriter = new CsvWriter(streamWriter, System.Globalization.CultureInfo.CurrentCulture);
+            csvWriter.WriteRecords(records);
         }
+
+        return memoryStream.ToArray();
     }
 }

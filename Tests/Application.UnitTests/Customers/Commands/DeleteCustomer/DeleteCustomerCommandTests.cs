@@ -3,53 +3,53 @@ using Northwind.Application.Customers.Commands.DeleteCustomer;
 using Northwind.Application.UnitTests.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Northwind.Domain.Entities;
 using Xunit;
 
-namespace Northwind.Application.UnitTests.Customers.Commands.DeleteCustomer
+namespace Northwind.Application.UnitTests.Customers.Commands.DeleteCustomer;
+
+public class DeleteCustomerCommandTests : CommandTestBase
 {
-    public class DeleteCustomerCommandTests : CommandTestBase
+    private readonly DeleteCustomerCommandHandler _sut;
+
+    public DeleteCustomerCommandTests()
+        : base()
     {
-        private readonly DeleteCustomerCommandHandler _sut;
+        _sut = new DeleteCustomerCommandHandler(_context);
+    }
 
-        public DeleteCustomerCommandTests()
-            : base()
-        {
-            _sut = new DeleteCustomerCommandHandler(_context);
-        }
+    [Fact]
+    public async Task Handle_GivenInvalidId_ThrowsNotFoundException()
+    {
+        string invalidId = "INVLD";
 
-        [Fact]
-        public async Task Handle_GivenInvalidId_ThrowsNotFoundException()
-        {
-            var invalidId = "INVLD";
+        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = invalidId };
 
-            var command = new DeleteCustomerCommand { Id = invalidId };
+        await Assert.ThrowsAsync<NotFoundException>(() => _sut.Handle(command, CancellationToken.None));
+    }
 
-            await Assert.ThrowsAsync<NotFoundException>(() => _sut.Handle(command, CancellationToken.None));
-        }
+    [Fact]
+    public async Task Handle_GivenValidIdAndZeroOrders_DeletesCustomer()
+    {
+        string validId = "JASON";
 
-        [Fact]
-        public async Task Handle_GivenValidIdAndZeroOrders_DeletesCustomer()
-        {
-            var validId = "JASON";
+        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = validId };
 
-            var command = new DeleteCustomerCommand { Id = validId };
+        await _sut.Handle(command, CancellationToken.None);
 
-            await _sut.Handle(command, CancellationToken.None);
+        Customer customer = await _context.Customers.FindAsync(validId);
 
-            var customer = await _context.Customers.FindAsync(validId);
+        Assert.Null(customer);
+    }
 
-            Assert.Null(customer);
-        }
+    [Fact]
+    public async Task Handle_GivenValidIdAndSomeOrders_ThrowsDeleteFailureException()
+    {
+        string validId = "BREND";
 
-        [Fact]
-        public async Task Handle_GivenValidIdAndSomeOrders_ThrowsDeleteFailureException()
-        {
-            var validId = "BREND";
+        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = validId };
 
-            var command = new DeleteCustomerCommand { Id = validId };
+        await Assert.ThrowsAsync<DeleteFailureException>(() => _sut.Handle(command, CancellationToken.None));
 
-            await Assert.ThrowsAsync<DeleteFailureException>(() => _sut.Handle(command, CancellationToken.None));
-
-        }
     }
 }

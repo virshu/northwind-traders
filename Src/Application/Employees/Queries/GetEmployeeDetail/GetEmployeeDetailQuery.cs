@@ -7,32 +7,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Northwind.Application.Employees.Queries.GetEmployeeDetail
+namespace Northwind.Application.Employees.Queries.GetEmployeeDetail;
+
+public class GetEmployeeDetailQuery : IRequest<EmployeeDetailVm>
 {
-    public class GetEmployeeDetailQuery : IRequest<EmployeeDetailVm>
+    public int Id { get; set; }
+
+    public class GetEmployeeDetailQueryHandler : IRequestHandler<GetEmployeeDetailQuery, EmployeeDetailVm>
     {
-        public int Id { get; set; }
+        private readonly INorthwindDbContext _context;
+        private readonly IMapper _mapper;
 
-        public class GetEmployeeDetailQueryHandler : IRequestHandler<GetEmployeeDetailQuery, EmployeeDetailVm>
+        public GetEmployeeDetailQueryHandler(INorthwindDbContext context, IMapper mapper)
         {
-            private readonly INorthwindDbContext _context;
-            private readonly IMapper _mapper;
+            _context = context;
+            _mapper = mapper;
+        }
 
-            public GetEmployeeDetailQueryHandler(INorthwindDbContext context, IMapper mapper)
-            {
-                _context = context;
-                _mapper = mapper;
-            }
+        public async Task<EmployeeDetailVm> Handle(GetEmployeeDetailQuery request, CancellationToken cancellationToken)
+        {
+            EmployeeDetailVm vm = await _context.Employees
+                .Where(e => e.EmployeeId == request.Id)
+                .ProjectTo<EmployeeDetailVm>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(cancellationToken);
 
-            public async Task<EmployeeDetailVm> Handle(GetEmployeeDetailQuery request, CancellationToken cancellationToken)
-            {
-                var vm = await _context.Employees
-                    .Where(e => e.EmployeeId == request.Id)
-                    .ProjectTo<EmployeeDetailVm>(_mapper.ConfigurationProvider)
-                    .SingleOrDefaultAsync(cancellationToken);
-
-                return vm;
-            }
+            return vm;
         }
     }
 }

@@ -11,111 +11,110 @@ using Northwind.Domain.Entities;
 using Shouldly;
 using Xunit;
 
-namespace Northwind.Application.UnitTests.Mappings
+namespace Northwind.Application.UnitTests.Mappings;
+
+public class MappingTests : IClassFixture<MappingTestsFixture>
 {
-    public class MappingTests : IClassFixture<MappingTestsFixture>
+    private readonly IConfigurationProvider _configuration;
+    private readonly IMapper _mapper;
+
+    public MappingTests(MappingTestsFixture fixture)
     {
-        private readonly IConfigurationProvider _configuration;
-        private readonly IMapper _mapper;
+        _configuration = fixture.ConfigurationProvider;
+        _mapper = fixture.Mapper;
+    }
 
-        public MappingTests(MappingTestsFixture fixture)
-        {
-            _configuration = fixture.ConfigurationProvider;
-            _mapper = fixture.Mapper;
-        }
+    [Fact]
+    public void ShouldHaveValidConfiguration()
+    {
+        _configuration.AssertConfigurationIsValid();
+    }
 
-        [Fact]
-        public void ShouldHaveValidConfiguration()
-        {
-            _configuration.AssertConfigurationIsValid();
-        }
+    [Fact]
+    public void ShouldMapCategoryToCategoryDto()
+    {
+        Category entity = new Category();
 
-        [Fact]
-        public void ShouldMapCategoryToCategoryDto()
-        {
-            var entity = new Category();
+        CategoryDto result = _mapper.Map<CategoryDto>(entity);
 
-            var result = _mapper.Map<CategoryDto>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<CategoryDto>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<CategoryDto>();
-        }
+    [Fact]
+    public void ShouldMapCustomerToCustomerLookupDto()
+    {
+        Customer entity = new Customer();
 
-        [Fact]
-        public void ShouldMapCustomerToCustomerLookupDto()
-        {
-            var entity = new Customer();
+        CustomerLookupDto result = _mapper.Map<CustomerLookupDto>(entity);
 
-            var result = _mapper.Map<CustomerLookupDto>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<CustomerLookupDto>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<CustomerLookupDto>();
-        }
+    [Fact]
+    public void ShouldMapProductToProductDetailVm()
+    {
+        Product entity = new Product();
 
-        [Fact]
-        public void ShouldMapProductToProductDetailVm()
-        {
-            var entity = new Product();
+        ProductDetailVm result = _mapper.Map<ProductDetailVm>(entity);
 
-            var result = _mapper.Map<ProductDetailVm>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<ProductDetailVm>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<ProductDetailVm>();
-        }
+    [Fact]
+    public void ShouldMapProductToProductDto()
+    {
+        Product entity = new Product();
 
-        [Fact]
-        public void ShouldMapProductToProductDto()
-        {
-            var entity = new Product();
+        ProductDto result = _mapper.Map<ProductDto>(entity);
 
-            var result = _mapper.Map<ProductDto>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<ProductDto>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<ProductDto>();
-        }
+    [Fact]
+    public void ShouldMapProductToProductRecordDto()
+    {
+        Product entity = new Product();
 
-        [Fact]
-        public void ShouldMapProductToProductRecordDto()
-        {
-            var entity = new Product();
+        ProductRecordDto result = _mapper.Map<ProductRecordDto>(entity);
 
-            var result = _mapper.Map<ProductRecordDto>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<ProductRecordDto>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<ProductRecordDto>();
-        }
+    [Fact]
+    public void ShouldMapCustomerToCustomerDetailVm()
+    {
+        Customer entity = new Customer();
 
-        [Fact]
-        public void ShouldMapCustomerToCustomerDetailVm()
-        {
-            var entity = new Customer();
+        CustomerDetailVm result = _mapper.Map<CustomerDetailVm>(entity);
 
-            var result = _mapper.Map<CustomerDetailVm>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<CustomerDetailVm>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<CustomerDetailVm>();
-        }
+    [Fact]
+    public void ShouldMapEmployeeToEmployeeLookupDto()
+    {
+        Employee entity = new Employee();
 
-        [Fact]
-        public void ShouldMapEmployeeToEmployeeLookupDto()
-        {
-            var entity = new Employee();
+        EmployeeLookupDto result = _mapper.Map<EmployeeLookupDto>(entity);
 
-            var result = _mapper.Map<EmployeeLookupDto>(entity);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<EmployeeLookupDto>();
+    }
 
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<EmployeeLookupDto>();
-        }
+    [Fact]
+    public void ShouldMapEmployeeTerritoryToEmployeeTerritoryDto()
+    {
+        EmployeeTerritory entity = new EmployeeTerritory();
 
-        [Fact]
-        public void ShouldMapEmployeeTerritoryToEmployeeTerritoryDto()
-        {
-            var entity = new EmployeeTerritory();
+        EmployeeTerritoryDto result = _mapper.Map<EmployeeTerritoryDto>(entity);
 
-            var result = _mapper.Map<EmployeeTerritoryDto>(entity);
-
-            result.ShouldNotBeNull();
-            result.ShouldBeOfType<EmployeeTerritoryDto>();
-        }
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<EmployeeTerritoryDto>();
     }
 }

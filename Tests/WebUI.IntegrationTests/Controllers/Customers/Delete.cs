@@ -4,39 +4,38 @@ using System.Threading.Tasks;
 using Northwind.WebUI.IntegrationTests.Common;
 using Xunit;
 
-namespace Northwind.WebUI.IntegrationTests.Controllers.Customers
+namespace Northwind.WebUI.IntegrationTests.Controllers.Customers;
+
+public class Delete : IClassFixture<CustomWebApplicationFactory<Startup>>
 {
-    public class Delete : IClassFixture<CustomWebApplicationFactory<Startup>>
+    private readonly CustomWebApplicationFactory<Startup> _factory;
+
+    public Delete(CustomWebApplicationFactory<Startup> factory)
     {
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        _factory = factory;
+    }
 
-        public Delete(CustomWebApplicationFactory<Startup> factory)
-        {
-            _factory = factory;
-        }
+    [Fact]
+    public async Task GivenId_ReturnsSuccessStatusCode()
+    {
+        HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        [Fact]
-        public async Task GivenId_ReturnsSuccessStatusCode()
-        {
-            var client = await _factory.GetAuthenticatedClientAsync();
+        string validId = "ALFKI";
 
-            var validId = "ALFKI";
+        HttpResponseMessage response = await client.DeleteAsync($"/api/customers/delete/{validId}");
 
-            var response = await client.DeleteAsync($"/api/customers/delete/{validId}");
+        response.EnsureSuccessStatusCode();
+    }
 
-            response.EnsureSuccessStatusCode();
-        }
+    [Fact]
+    public async Task GivenInvalidId_ReturnsNotFoundStatusCode()
+    {
+        HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        [Fact]
-        public async Task GivenInvalidId_ReturnsNotFoundStatusCode()
-        {
-            var client = await _factory.GetAuthenticatedClientAsync();
+        string invalidId = "AAAAA";
 
-            var invalidId = "AAAAA";
+        HttpResponseMessage response = await client.DeleteAsync($"/api/customers/delete/{invalidId}");
 
-            var response = await client.DeleteAsync($"/api/customers/delete/{invalidId}");
-
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }

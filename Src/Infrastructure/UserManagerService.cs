@@ -4,48 +4,47 @@ using Northwind.Application.Common.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Northwind.Infrastructure
+namespace Northwind.Infrastructure;
+
+public class UserManagerService : IUserManager
 {
-    public class UserManagerService : IUserManager
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public UserManagerService(UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        _userManager = userManager;
+    }
 
-        public UserManagerService(UserManager<ApplicationUser> userManager)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    {
+        ApplicationUser user = new ApplicationUser
         {
-            _userManager = userManager;
+            UserName = userName,
+            Email = userName,
+        };
+
+        IdentityResult result = await _userManager.CreateAsync(user, password);
+
+        return (result.ToApplicationResult(), user.Id);
+    }
+
+    public async Task<Result> DeleteUserAsync(string userId)
+    {
+        ApplicationUser user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+
+        if (user != null)
+        {
+            return await DeleteUserAsync(user);
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
-        {
-            var user = new ApplicationUser
-            {
-                UserName = userName,
-                Email = userName,
-            };
-
-            var result = await _userManager.CreateAsync(user, password);
-
-            return (result.ToApplicationResult(), user.Id);
-        }
-
-        public async Task<Result> DeleteUserAsync(string userId)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-            if (user != null)
-            {
-                return await DeleteUserAsync(user);
-            }
-
-            return Result.Success();
-        }
+        return Result.Success();
+    }
 
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
-        {
-            var result = await _userManager.DeleteAsync(user);
+    public async Task<Result> DeleteUserAsync(ApplicationUser user)
+    {
+        IdentityResult result = await _userManager.DeleteAsync(user);
 
-            return result.ToApplicationResult();
-        }
+        return result.ToApplicationResult();
     }
 }

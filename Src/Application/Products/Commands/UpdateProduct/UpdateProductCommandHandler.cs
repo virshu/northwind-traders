@@ -5,36 +5,35 @@ using Northwind.Application.Common.Exceptions;
 using Northwind.Application.Common.Interfaces;
 using Northwind.Domain.Entities;
 
-namespace Northwind.Application.Products.Commands.UpdateProduct
+namespace Northwind.Application.Products.Commands.UpdateProduct;
+
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
-    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
+    private readonly INorthwindDbContext _context;
+
+    public UpdateProductCommandHandler(INorthwindDbContext context)
     {
-        private readonly INorthwindDbContext _context;
+        _context = context;
+    }
 
-        public UpdateProductCommandHandler(INorthwindDbContext context)
+    public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    {
+        Product entity = await _context.Products.FindAsync(request.ProductId);
+
+        if (entity == null)
         {
-            _context = context;
+            throw new NotFoundException(nameof(Product), request.ProductId);
         }
 
-        public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _context.Products.FindAsync(request.ProductId);
+        entity.ProductId = request.ProductId;
+        entity.ProductName = request.ProductName;
+        entity.CategoryId = request.CategoryId;
+        entity.SupplierId = request.SupplierId;
+        entity.UnitPrice = request.UnitPrice;
+        entity.Discontinued = request.Discontinued;
 
-            if (entity == null)
-            {
-                throw new NotFoundException(nameof(Product), request.ProductId);
-            }
+        await _context.SaveChangesAsync(cancellationToken);
 
-            entity.ProductId = request.ProductId;
-            entity.ProductName = request.ProductName;
-            entity.CategoryId = request.CategoryId;
-            entity.SupplierId = request.SupplierId;
-            entity.UnitPrice = request.UnitPrice;
-            entity.Discontinued = request.Discontinued;
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

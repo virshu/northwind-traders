@@ -5,53 +5,52 @@ using Northwind.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Northwind.Application.Employees.Commands.DeleteEmployee
+namespace Northwind.Application.Employees.Commands.DeleteEmployee;
+
+public class DeleteEmployeeCommand : IRequest
 {
-    public class DeleteEmployeeCommand : IRequest
+    public int Id { get; set; }
+
+    public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand>
     {
-        public int Id { get; set; }
+        private readonly INorthwindDbContext _context;
+        private readonly IUserManager _userManager;
+        private readonly ICurrentUserService _currentUser;
 
-        public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand>
+        public DeleteEmployeeCommandHandler(INorthwindDbContext context, IUserManager userManager, ICurrentUserService currentUser)
         {
-            private readonly INorthwindDbContext _context;
-            private readonly IUserManager _userManager;
-            private readonly ICurrentUserService _currentUser;
+            _context = context;
+            _userManager = userManager;
+            _currentUser = currentUser;
+        }
 
-            public DeleteEmployeeCommandHandler(INorthwindDbContext context, IUserManager userManager, ICurrentUserService currentUser)
+        public async Task<Unit> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
+        {
+            Employee entity = await _context.Employees
+                .FindAsync(request.Id);
+
+            if (entity == null)
             {
-                _context = context;
-                _userManager = userManager;
-                _currentUser = currentUser;
+                throw new NotFoundException(nameof(Employee), request.Id);
             }
 
-            public async Task<Unit> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
+            if (entity.UserId == _currentUser.UserId)
             {
-                var entity = await _context.Employees
-                    .FindAsync(request.Id);
-
-                if (entity == null)
-                {
-                    throw new NotFoundException(nameof(Employee), request.Id);
-                }
-
-                if (entity.UserId == _currentUser.UserId)
-                {
-                    throw new BadRequestException("Employees cannot delete their own account.");
-                }
-
-                if (entity.UserId != null)
-                {
-                    await _userManager.DeleteUserAsync(entity.UserId);
-                }
-
-                // TODO: Update this logic, this will only work if the employee has no associated territories or orders.Emp
-
-                _context.Employees.Remove(entity);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
+                throw new BadRequestException("Employees cannot delete their own account.");
             }
+
+            if (entity.UserId != null)
+            {
+                await _userManager.DeleteUserAsync(entity.UserId);
+            }
+
+            // TODO: Update this logic, this will only work if the employee has no associated territories or orders.Emp
+
+            _context.Employees.Remove(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
         }
     }
 }

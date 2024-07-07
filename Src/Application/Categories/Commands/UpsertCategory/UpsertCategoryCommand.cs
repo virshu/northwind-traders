@@ -4,50 +4,49 @@ using MediatR;
 using Northwind.Application.Common.Interfaces;
 using Northwind.Domain.Entities;
 
-namespace Northwind.Application.Categories.Commands.UpsertCategory
+namespace Northwind.Application.Categories.Commands.UpsertCategory;
+
+public class UpsertCategoryCommand : IRequest<int>
 {
-    public class UpsertCategoryCommand : IRequest<int>
+    public int? Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    public byte[] Picture { get; set; }
+
+    public class UpsertCategoryCommandHandler : IRequestHandler<UpsertCategoryCommand, int>
     {
-        public int? Id { get; set; }
+        private readonly INorthwindDbContext _context;
 
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public byte[] Picture { get; set; }
-
-        public class UpsertCategoryCommandHandler : IRequestHandler<UpsertCategoryCommand, int>
+        public UpsertCategoryCommandHandler(INorthwindDbContext context)
         {
-            private readonly INorthwindDbContext _context;
+            _context = context;
+        }
 
-            public UpsertCategoryCommandHandler(INorthwindDbContext context)
+        public async Task<int> Handle(UpsertCategoryCommand request, CancellationToken cancellationToken)
+        {
+            Category entity;
+
+            if (request.Id.HasValue)
             {
-                _context = context;
+                entity = await _context.Categories.FindAsync(request.Id.Value);
+            }
+            else
+            {
+                entity = new Category();
+
+                _context.Categories.Add(entity);
             }
 
-            public async Task<int> Handle(UpsertCategoryCommand request, CancellationToken cancellationToken)
-            {
-                Category entity;
+            entity.CategoryName = request.Name;
+            entity.Description = request.Description;
+            entity.Picture = request.Picture;
 
-                if (request.Id.HasValue)
-                {
-                    entity = await _context.Categories.FindAsync(request.Id.Value);
-                }
-                else
-                {
-                    entity = new Category();
+            await _context.SaveChangesAsync(cancellationToken);
 
-                    _context.Categories.Add(entity);
-                }
-
-                entity.CategoryName = request.Name;
-                entity.Description = request.Description;
-                entity.Picture = request.Picture;
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return entity.CategoryId;
-            }
+            return entity.CategoryId;
         }
     }
 }

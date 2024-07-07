@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Northwind.Persistence
+namespace Northwind.Persistence;
+
+public class DesignTimeNorthwindDbContextFactory : DesignTimeDbContextFactoryBase<NorthwindDbContext>
 {
-    public class DesignTimeNorthwindDbContextFactory : DesignTimeDbContextFactoryBase<NorthwindDbContext>
+    protected override NorthwindDbContext CreateNewInstance(DbContextOptions<NorthwindDbContext> options)
     {
-        protected override NorthwindDbContext CreateNewInstance(DbContextOptions<NorthwindDbContext> options)
-        {
-            return new NorthwindDbContext(options);
-        }
+        return new NorthwindDbContext(options);
     }
 }

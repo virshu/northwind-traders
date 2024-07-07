@@ -5,37 +5,36 @@ using Northwind.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Northwind.Application.Categories.Commands.DeleteCategory
+namespace Northwind.Application.Categories.Commands.DeleteCategory;
+
+public class DeleteCategoryCommand : IRequest
 {
-    public class DeleteCategoryCommand : IRequest
+    public int Id { get; set; }
+
+    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
     {
-        public int Id { get; set; }
+        private readonly INorthwindDbContext _context;
 
-        public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand>
+        public DeleteCategoryCommandHandler(INorthwindDbContext context)
         {
-            private readonly INorthwindDbContext _context;
+            _context = context;
+        }
 
-            public DeleteCategoryCommandHandler(INorthwindDbContext context)
+        public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        {
+            Category entity = await _context.Categories
+                .FindAsync(request.Id);
+
+            if (entity == null)
             {
-                _context = context;
+                throw new NotFoundException(nameof(Category), request.Id);
             }
 
-            public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
-            {
-                var entity = await _context.Categories
-                    .FindAsync(request.Id);
+            _context.Categories.Remove(entity);
 
-                if (entity == null)
-                {
-                    throw new NotFoundException(nameof(Category), request.Id);
-                }
+            await _context.SaveChangesAsync(cancellationToken);
 
-                _context.Categories.Remove(entity);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
-            }
+            return Unit.Value;
         }
     }
 }
