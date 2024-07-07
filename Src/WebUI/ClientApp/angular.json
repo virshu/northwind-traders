@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "northwind:build:production"
+              "buildTarget": "northwind:build:production"
             },
             "development": {
-              "browserTarget": "northwind:build:development"
+              "buildTarget": "northwind:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "northwind:build"
+            "buildTarget": "northwind:build"
           }
         },
         "test": {
