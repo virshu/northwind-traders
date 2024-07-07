@@ -26,7 +26,7 @@ public class GetCustomersListQueryHandler : IRequestHandler<GetCustomersListQuer
             .ProjectTo<CustomerLookupDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
-        CustomersListVm vm = new CustomersListVm
+        CustomersListVm vm = new()
         {
             Customers = customers
         };

@@ -79,6 +79,6 @@
     </environment>
     <script src="~/Identity/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

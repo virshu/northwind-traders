@@ -17,7 +17,7 @@ public class UserManagerService : IUserManager
 
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
-        ApplicationUser user = new ApplicationUser
+        ApplicationUser user = new()
         {
             UserName = userName,
             Email = userName,

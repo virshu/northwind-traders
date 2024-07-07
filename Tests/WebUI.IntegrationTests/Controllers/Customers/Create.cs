@@ -20,7 +20,7 @@ public class Create : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        CreateCustomerCommand command = new CreateCustomerCommand
+        CreateCustomerCommand command = new()
         {
             Id = "ABCDE",
             Address = "Obere Str. 57",

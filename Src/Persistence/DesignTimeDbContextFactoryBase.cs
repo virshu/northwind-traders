@@ -26,13 +26,14 @@ public abstract class DesignTimeDbContextFactoryBase<TContext> :
         IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(basePath)
             .AddJsonFile("appsettings.json")
-            .AddJsonFile($"appsettings.Local.json", optional: true)
+            .AddJsonFile("appsettings.Local.json", optional: true)
             .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
             .AddEnvironmentVariables()
+            .AddSystemsManager("/Northwind")
             .Build();
 
         string connectionString = configuration.GetConnectionString(ConnectionStringName);
-
+        Console.WriteLine($"Connection: {connectionString}");
         return Create(connectionString);
     }
 
@@ -45,7 +46,7 @@ public abstract class DesignTimeDbContextFactoryBase<TContext> :
 
         Console.WriteLine($"DesignTimeDbContextFactoryBase.Create(string): Connection string: '{connectionString}'.");
 
-        DbContextOptionsBuilder<TContext> optionsBuilder = new DbContextOptionsBuilder<TContext>();
+        DbContextOptionsBuilder<TContext> optionsBuilder = new();
 
         optionsBuilder.UseSqlServer(connectionString);
 

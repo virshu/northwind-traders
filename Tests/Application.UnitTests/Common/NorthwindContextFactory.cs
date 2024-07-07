@@ -13,7 +13,7 @@ public class NorthwindContextFactory
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        NorthwindDbContext context = new NorthwindDbContext(options);
+        NorthwindDbContext context = new(options);
 
         context.Database.EnsureCreated();
 

@@ -26,7 +26,7 @@ public class GetCategoriesListQueryHandler : IRequestHandler<GetCategoriesListQu
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
-        CategoriesListVm vm = new CategoriesListVm
+        CategoriesListVm vm = new()
         {
             Categories = categories,
             Count = categories.Count

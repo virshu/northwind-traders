@@ -15,7 +15,7 @@ public class QueryTestFixture : IDisposable
     {
         Context = NorthwindContextFactory.Create();
 
-        MapperConfiguration configurationProvider = new MapperConfiguration(cfg =>
+        MapperConfiguration configurationProvider = new(cfg =>
         {
             cfg.AddProfile<MappingProfile>();
         });

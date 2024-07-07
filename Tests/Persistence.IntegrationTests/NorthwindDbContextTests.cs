@@ -47,7 +47,7 @@ public class NorthwindDbContextTests : IDisposable
     [Fact]
     public async Task SaveChangesAsync_GivenNewProduct_ShouldSetCreatedProperties()
     {
-        Product product = new Product
+        Product product = new()
         {
             ProductId = 2,
             ProductName = "Cake"

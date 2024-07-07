@@ -9,8 +9,8 @@ public class ValueObjectTests
     [Fact]
     public void Equals_GivenDifferentValues_ShouldReturnFalse()
     {
-        Point point1 = new Point(1, 2);
-        Point point2 = new Point(2, 1);
+        Point point1 = new(1, 2);
+        Point point2 = new(2, 1);
 
         Assert.False(point1.Equals(point2));
     }
@@ -18,8 +18,8 @@ public class ValueObjectTests
     [Fact]
     public void Equals_GivenMatchingValues_ShouldReturnTrue()
     {
-        Point point1 = new Point(1, 2);
-        Point point2 = new Point(1, 2);
+        Point point1 = new(1, 2);
+        Point point2 = new(1, 2);
 
         Assert.True(point1.Equals(point2));
     }

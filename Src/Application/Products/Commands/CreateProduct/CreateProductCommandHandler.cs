@@ -17,7 +17,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
     public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        Product entity = new Product
+        Product entity = new()
         {
             ProductName = request.ProductName,
             CategoryId = request.CategoryId,

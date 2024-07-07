@@ -33,7 +33,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapCategoryToCategoryDto()
     {
-        Category entity = new Category();
+        Category entity = new();
 
         CategoryDto result = _mapper.Map<CategoryDto>(entity);
 
@@ -44,7 +44,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapCustomerToCustomerLookupDto()
     {
-        Customer entity = new Customer();
+        Customer entity = new();
 
         CustomerLookupDto result = _mapper.Map<CustomerLookupDto>(entity);
 
@@ -55,7 +55,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapProductToProductDetailVm()
     {
-        Product entity = new Product();
+        Product entity = new();
 
         ProductDetailVm result = _mapper.Map<ProductDetailVm>(entity);
 
@@ -66,7 +66,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapProductToProductDto()
     {
-        Product entity = new Product();
+        Product entity = new();
 
         ProductDto result = _mapper.Map<ProductDto>(entity);
 
@@ -77,7 +77,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapProductToProductRecordDto()
     {
-        Product entity = new Product();
+        Product entity = new();
 
         ProductRecordDto result = _mapper.Map<ProductRecordDto>(entity);
 
@@ -88,7 +88,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapCustomerToCustomerDetailVm()
     {
-        Customer entity = new Customer();
+        Customer entity = new();
 
         CustomerDetailVm result = _mapper.Map<CustomerDetailVm>(entity);
 
@@ -99,7 +99,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapEmployeeToEmployeeLookupDto()
     {
-        Employee entity = new Employee();
+        Employee entity = new();
 
         EmployeeLookupDto result = _mapper.Map<EmployeeLookupDto>(entity);
 
@@ -110,7 +110,7 @@ public class MappingTests : IClassFixture<MappingTestsFixture>
     [Fact]
     public void ShouldMapEmployeeTerritoryToEmployeeTerritoryDto()
     {
-        EmployeeTerritory entity = new EmployeeTerritory();
+        EmployeeTerritory entity = new();
 
         EmployeeTerritoryDto result = _mapper.Map<EmployeeTerritoryDto>(entity);
 

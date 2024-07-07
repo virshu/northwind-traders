@@ -74,7 +74,7 @@ public class RegisterModel : PageModel
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         if (ModelState.IsValid)
         {
-            ApplicationUser user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+            ApplicationUser user = new() { UserName = Input.Email, Email = Input.Email };
             IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
             if (result.Succeeded)
             {

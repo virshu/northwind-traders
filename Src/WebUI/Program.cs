@@ -7,71 +7,59 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Northwind.Application.System.Commands.SeedSampleData;
 using Northwind.Infrastructure;
+using Northwind.WebUI;
 
-namespace Northwind.WebUI;
+IWebHost host = CreateWebHostBuilder(args).Build();
 
-public class Program
+using (IServiceScope scope = host.Services.CreateScope())
 {
-    public static async Task Main(string[] args)
+    IServiceProvider services = scope.ServiceProvider;
+
+    try
     {
-        IWebHost host = CreateWebHostBuilder(args).Build();
+        NorthwindDbContext northwindContext = services.GetRequiredService<NorthwindDbContext>();
+        await northwindContext.Database.MigrateAsync();
 
-        using (IServiceScope scope = host.Services.CreateScope())
-        {
-            IServiceProvider services = scope.ServiceProvider;
+        ApplicationDbContext identityContext = services.GetRequiredService<ApplicationDbContext>();
+        await identityContext.Database.MigrateAsync();
 
-            try
-            {
-                NorthwindDbContext northwindContext = services.GetRequiredService<NorthwindDbContext>();
-                northwindContext.Database.Migrate();
-
-                ApplicationDbContext identityContext = services.GetRequiredService<ApplicationDbContext>();
-                identityContext.Database.Migrate();
-
-                IMediator mediator = services.GetRequiredService<IMediator>();
-                await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-                ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred while migrating or initializing the database.");
-            }
-        }
-
-        host.Run();
+        IMediator mediator = services.GetRequiredService<IMediator>();
+        await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);
     }
-
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                IWebHostEnvironment env = hostingContext.HostingEnvironment;
-
-                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.Local.json", optional: true, reloadOnChange: true);
-
-                if (env.IsDevelopment())
-                {
-                    Assembly appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                    if (appAssembly != null)
-                    {
-                        config.AddUserSecrets(appAssembly, optional: true);
-                    }
-                }
-
-                config.AddEnvironmentVariables();
-
-                if (args != null)
-                {
-                    config.AddCommandLine(args);
-                }
-            })
-            .UseStartup<Startup>();
+    catch (Exception ex)
+    {
+        ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+    }
 }
+
+await host.RunAsync();
+return;
+
+static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+    WebHost.CreateDefaultBuilder(args)
+        .ConfigureAppConfiguration((hostingContext, config) =>
+        {
+            IWebHostEnvironment env = hostingContext.HostingEnvironment;
+
+            config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+
+            if (env.IsDevelopment())
+            {
+                Assembly appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                config.AddUserSecrets(appAssembly, optional: true);
+            }
+
+            config.AddSystemsManager("/Northwind");
+            config.AddEnvironmentVariables();
+
+            config.AddCommandLine(args);
+        })
+        .UseStartup<Startup>();

@@ -44,14 +44,14 @@ public static class DependencyInjection
                     });
                 }).AddTestUsers(new List<TestUser>
                 {
-                    new TestUser
+                    new()
                     {
                         SubjectId = "f26da293-02fb-4c90-be75-e4aa51e0bb17",
                         Username = "jason@northwind",
                         Password = "Northwind1!",
                         Claims = new List<Claim>
                         {
-                            new Claim(JwtClaimTypes.Email, "jason@northwind")
+                            new(JwtClaimTypes.Email, "jason@northwind")
                         }
                     }
                 });

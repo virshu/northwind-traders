@@ -21,7 +21,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        UpdateProductCommand command = new UpdateProductCommand
+        UpdateProductCommand command = new()
         {
             ProductId = 1,
             ProductName = "Chai",
@@ -43,7 +43,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        UpdateProductCommand invalidCommand = new UpdateProductCommand
+        UpdateProductCommand invalidCommand = new()
         {
             ProductId = 0,
             ProductName = "Original Frankfurter grüne Soße",

@@ -33,7 +33,7 @@ public class GetProductsFileQueryHandler : IRequestHandler<GetProductsFileQuery,
 
         byte[] fileContent = _fileBuilder.BuildProductsFile(records);
 
-        ProductsFileVm vm = new ProductsFileVm
+        ProductsFileVm vm = new()
         {
             Content = fileContent,
             ContentType = "text/csv",

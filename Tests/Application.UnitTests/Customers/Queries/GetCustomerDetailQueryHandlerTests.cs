@@ -24,7 +24,7 @@ public class GetCustomerDetailQueryHandlerTests
     [Fact]
     public async Task GetCustomerDetail()
     {
-        GetCustomerDetailQueryHandler sut = new GetCustomerDetailQueryHandler(_context, _mapper);
+        GetCustomerDetailQueryHandler sut = new(_context, _mapper);
 
         CustomerDetailVm result = await sut.Handle(new GetCustomerDetailQuery { Id = "JASON" }, CancellationToken.None);
 

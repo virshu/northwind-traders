@@ -21,7 +21,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        UpdateCustomerCommand command = new UpdateCustomerCommand
+        UpdateCustomerCommand command = new()
         {
             Id = "ALFKI",
             Address = "Obere Str. 57",
@@ -47,7 +47,7 @@ public class Update : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         HttpClient client = await _factory.GetAuthenticatedClientAsync();
 
-        UpdateCustomerCommand invalidCommand = new UpdateCustomerCommand
+        UpdateCustomerCommand invalidCommand = new()
         {
             Id = "AAAAA",
             Address = "Obere Str. 57",

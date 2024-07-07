@@ -23,7 +23,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     {
         string invalidId = "INVLD";
 
-        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = invalidId };
+        DeleteCustomerCommand command = new() { Id = invalidId };
 
         await Assert.ThrowsAsync<NotFoundException>(() => _sut.Handle(command, CancellationToken.None));
     }
@@ -33,7 +33,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     {
         string validId = "JASON";
 
-        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = validId };
+        DeleteCustomerCommand command = new() { Id = validId };
 
         await _sut.Handle(command, CancellationToken.None);
 
@@ -47,7 +47,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     {
         string validId = "BREND";
 
-        DeleteCustomerCommand command = new DeleteCustomerCommand { Id = validId };
+        DeleteCustomerCommand command = new() { Id = validId };
 
         await Assert.ThrowsAsync<DeleteFailureException>(() => _sut.Handle(command, CancellationToken.None));
 

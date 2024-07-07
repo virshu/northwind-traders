@@ -39,7 +39,7 @@ public class Utilities
             PostalCode = "12209"
         });
 
-        Supplier supplier1 = new Supplier
+        Supplier supplier1 = new()
         {
             CompanyName = "Exotic Liquids",
             ContactName = "Charlotte Cooper",
@@ -54,7 +54,7 @@ public class Utilities
 
         context.Suppliers.Add(supplier1);
 
-        Category category1 = new Category
+        Category category1 = new()
         {
             CategoryName = "Beverages",
             Description = "Soft drinks, coffees, teas, beers, and ales"

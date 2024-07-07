@@ -51,7 +51,7 @@ public class NorthwindDbContext : DbContext, INorthwindDbContext
 
     public DbSet<Territory> Territories { get; set; }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         foreach (EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
         {

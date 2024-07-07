@@ -15,11 +15,11 @@ public class SampleDataSeeder
     private readonly INorthwindDbContext _context;
     private readonly IUserManager _userManager;
 
-    private readonly Dictionary<int, Employee> Employees = new Dictionary<int, Employee>();
-    private readonly Dictionary<int, Supplier> Suppliers = new Dictionary<int, Supplier>();
-    private readonly Dictionary<int, Category> Categories = new Dictionary<int, Category>();
-    private readonly Dictionary<int, Shipper> Shippers = new Dictionary<int, Shipper>();
-    private readonly Dictionary<int, Product> Products = new Dictionary<int, Product>();
+    private readonly Dictionary<int, Employee> Employees = new();
+    private readonly Dictionary<int, Supplier> Suppliers = new();
+    private readonly Dictionary<int, Category> Categories = new();
+    private readonly Dictionary<int, Shipper> Shippers = new();
+    private readonly Dictionary<int, Product> Products = new();
 
     public SampleDataSeeder(INorthwindDbContext context, IUserManager userManager)
     {
@@ -738,7 +738,7 @@ public class SampleDataSeeder
 
     private async Task SeedOrdersAsync(CancellationToken cancellationToken)
     {
-        List<Order> orders = new List<Order>
+        List<Order> orders = new()
         {
             new Order
             {

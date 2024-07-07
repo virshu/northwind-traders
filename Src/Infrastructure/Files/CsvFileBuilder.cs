@@ -10,10 +10,10 @@ public class CsvFileBuilder : ICsvFileBuilder
 {
     public byte[] BuildProductsFile(IEnumerable<ProductRecordDto> records)
     {
-        using MemoryStream memoryStream = new MemoryStream();
-        using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+        using MemoryStream memoryStream = new();
+        using (StreamWriter streamWriter = new(memoryStream))
         {
-            using CsvWriter csvWriter = new CsvWriter(streamWriter, System.Globalization.CultureInfo.CurrentCulture);
+            using CsvWriter csvWriter = new(streamWriter, System.Globalization.CultureInfo.CurrentCulture);
             csvWriter.WriteRecords(records);
         }
 

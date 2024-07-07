@@ -14,8 +14,8 @@ public class CreateCustomerCommandTests : CommandTestBase
     public void Handle_GivenValidRequest_ShouldRaiseCustomerCreatedNotification()
     {
         // Arrange
-        Mock<IMediator> mediatorMock = new Mock<IMediator>();
-        CreateCustomerCommand.Handler sut = new CreateCustomerCommand.Handler(_context, mediatorMock.Object);
+        Mock<IMediator> mediatorMock = new();
+        CreateCustomerCommand.Handler sut = new(_context, mediatorMock.Object);
         string newCustomerId = "QAZQ1";
 
         // Act

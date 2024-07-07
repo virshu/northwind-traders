@@ -28,7 +28,7 @@ public class GetProductsListQueryHandler : IRequestHandler<GetProductsListQuery,
             .OrderBy(p => p.ProductName)
             .ToListAsync(cancellationToken);
 
-        ProductsListVm vm = new ProductsListVm
+        ProductsListVm vm = new()
         {
             Products = products,
             CreateEnabled = true // TODO: Set based on user permissions.

@@ -30,7 +30,7 @@ public class GetEmployeesListQuery : IRequest<EmployeesListVm>
                 .OrderBy(e => e.Name)
                 .ToListAsync(cancellationToken);
 
-            EmployeesListVm vm = new EmployeesListVm
+            EmployeesListVm vm = new()
             {
                 Employees = employees
             };

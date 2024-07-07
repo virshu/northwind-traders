@@ -24,7 +24,7 @@ public class GetCustomersListQueryHandlerTests
     [Fact]
     public async Task GetCustomersTest()
     {
-        GetCustomersListQueryHandler sut = new GetCustomersListQueryHandler(_context, _mapper);
+        GetCustomersListQueryHandler sut = new(_context, _mapper);
 
         CustomersListVm result = await sut.Handle(new GetCustomersListQuery(), CancellationToken.None);
 

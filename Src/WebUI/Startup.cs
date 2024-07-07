@@ -129,7 +129,7 @@ public class Startup
     {
         app.Map("/services", builder => builder.Run(async context =>
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append("<h1>Registered Services</h1>");
             sb.Append("<table><thead>");
             sb.Append("<tr><th>Type</th><th>Lifetime</th><th>Instance</th></tr>");

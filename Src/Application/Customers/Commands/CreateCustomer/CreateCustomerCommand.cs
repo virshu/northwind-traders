@@ -43,7 +43,7 @@ public class CreateCustomerCommand : IRequest
 
         public async Task<Unit> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            Customer entity = new Customer
+            Customer entity = new()
             {
                 CustomerId = request.Id,
                 Address = request.Address,

@@ -13,7 +13,7 @@ public class AdAccount : ValueObject
 
     public static AdAccount For(string accountString)
     {
-        AdAccount account = new AdAccount();
+        AdAccount account = new();
 
         try
         {
