@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app.routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -17,28 +17,22 @@ import { CamelCaseToText } from '../pipes/camel-case-to-text';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavTopMenuComponent,
-    NavSideMenuComponent,
-    HomeComponent,
-    ProductsComponent,
-    CustomersComponent,
-    CamelCaseToText
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    AppRoutingModule,
-    ApiAuthorizationModule
-  ],
-  providers: [
-      { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-      CustomersClient,
-      ProductsClient
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        NavTopMenuComponent,
+        NavSideMenuComponent,
+        HomeComponent,
+        ProductsComponent,
+        CustomersComponent,
+        CamelCaseToText
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        ApiAuthorizationModule], providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+        CustomersClient,
+        ProductsClient,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
