@@ -15,25 +15,23 @@ public class NorthwindDbContextTests : IDisposable
 {
     private readonly string _userId;
     private readonly DateTime _dateTime;
-    private readonly Mock<IDateTime> _dateTimeMock;
-    private readonly Mock<ICurrentUserService> _currentUserServiceMock;
     private readonly NorthwindDbContext _sut;
 
     public NorthwindDbContextTests()
     {
         _dateTime = new DateTime(3001, 1, 1);
-        _dateTimeMock = new Mock<IDateTime>();
-        _dateTimeMock.Setup(m => m.Now).Returns(_dateTime);
+        Mock<IDateTime> dateTimeMock = new();
+        dateTimeMock.Setup(m => m.Now).Returns(_dateTime);
 
         _userId = "00000000-0000-0000-0000-000000000000";
-        _currentUserServiceMock = new Mock<ICurrentUserService>();
-        _currentUserServiceMock.Setup(m => m.UserId).Returns(_userId);
+        Mock<ICurrentUserService> currentUserServiceMock = new();
+        currentUserServiceMock.Setup(m => m.UserId).Returns(_userId);
 
         DbContextOptions<NorthwindDbContext> options = new DbContextOptionsBuilder<NorthwindDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        _sut = new NorthwindDbContext(options, _currentUserServiceMock.Object, _dateTimeMock.Object);
+        _sut = new NorthwindDbContext(options, currentUserServiceMock.Object, dateTimeMock.Object);
 
         _sut.Products.Add(new Product
         {
@@ -53,7 +51,7 @@ public class NorthwindDbContextTests : IDisposable
             ProductName = "Cake"
         };
 
-        _sut.Products.Add(product);
+        await _sut.Products.AddAsync(product);
 
         await _sut.SaveChangesAsync();
 
@@ -66,7 +64,7 @@ public class NorthwindDbContextTests : IDisposable
     {
         Product product = await _sut.Products.FindAsync(1);
 
-        product.UnitPrice = 4m;
+        product!.UnitPrice = 4m;
 
         await _sut.SaveChangesAsync();
 

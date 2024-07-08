@@ -20,9 +20,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasColumnType("money")
             .HasDefaultValueSql("((0))");
 
-        builder.Property(e => e.OrderDate).HasColumnType("datetime");
+        builder.Property(e => e.OrderDate).HasColumnType("timestamp without time zone");
 
-        builder.Property(e => e.RequiredDate).HasColumnType("datetime");
+        builder.Property(e => e.RequiredDate).HasColumnType("timestamp without time zone");
 
         builder.Property(e => e.ShipAddress).HasMaxLength(60);
 
@@ -36,11 +36,11 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(e => e.ShipRegion).HasMaxLength(15);
 
-        builder.Property(e => e.ShippedDate).HasColumnType("datetime");
+        builder.Property(e => e.ShippedDate).HasColumnType("timestamp without time zone");
 
-        builder.Property(e => e.Created).HasColumnType("datetime");
+        builder.Property(e => e.Created).HasColumnType("timestamp without time zone");
 
-        builder.Property(e => e.LastModified).HasColumnType("datetime");
+        builder.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
         builder.HasOne(d => d.Shipper)
             .WithMany(p => p.Orders)

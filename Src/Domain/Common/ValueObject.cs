@@ -6,21 +6,6 @@ namespace Northwind.Domain.Common;
 // Source: https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/implement-value-objects
 public abstract class ValueObject
 {
-    protected static bool EqualOperator(ValueObject left, ValueObject right)
-    {
-        if (left is null ^ right is null)
-        {
-            return false;
-        }
-
-        return left?.Equals(right) != false;
-    }
-
-    protected static bool NotEqualOperator(ValueObject left, ValueObject right)
-    {
-        return !(EqualOperator(left, right));
-    }
-
     protected abstract IEnumerable<object> GetAtomicValues();
 
     public override bool Equals(object obj)
@@ -31,8 +16,8 @@ public abstract class ValueObject
         }
 
         ValueObject other = (ValueObject)obj;
-        IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
-        IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
+        using IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
+        using IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
 
         while (thisValues.MoveNext() && otherValues.MoveNext())
         {

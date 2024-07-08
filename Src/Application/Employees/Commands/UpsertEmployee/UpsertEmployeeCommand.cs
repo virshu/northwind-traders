@@ -67,7 +67,7 @@ public class UpsertEmployeeCommand : IRequest<int>
                 _context.Employees.Add(entity);
             }
 
-            entity.TitleOfCourtesy = request.Title;
+            entity!.TitleOfCourtesy = request.Title;
             entity.FirstName = request.FirstName;
             entity.LastName = request.LastName;
             entity.BirthDate = request.BirthDate;

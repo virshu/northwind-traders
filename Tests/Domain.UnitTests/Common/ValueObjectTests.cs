@@ -26,10 +26,8 @@ public class ValueObjectTests
 
     private class Point : ValueObject
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
-        private Point() { }
+        private int X { get; }
+        private int Y { get; }
 
         public Point(int x, int y)
         {

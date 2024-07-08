@@ -91,18 +91,16 @@ public class LoginModel : PageModel
             }
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
             }
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User account locked out.");
                 return RedirectToPage("./Lockout");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return Page();
-            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return Page();
         }
 
         // If we got this far, something failed, redisplay form
@@ -127,12 +125,12 @@ public class LoginModel : PageModel
         string callbackUrl = Url.Page(
             "/Account/ConfirmEmail",
             pageHandler: null,
-            values: new { userId = userId, code = code },
+            values: new { userId, code },
             protocol: Request.Scheme);
         await _emailSender.SendEmailAsync(
             Input.Email,
             "Confirm your email",
-            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
         ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
         return Page();

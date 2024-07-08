@@ -40,7 +40,7 @@ public class UpsertCategoryCommand : IRequest<int>
                 _context.Categories.Add(entity);
             }
 
-            entity.CategoryName = request.Name;
+            entity!.CategoryName = request.Name;
             entity.Description = request.Description;
             entity.Picture = request.Picture;
 

@@ -15,7 +15,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsRequired()
             .HasMaxLength(15);
 
-        builder.Property(e => e.Description).HasColumnType("ntext");
+        builder.Property(e => e.Description).HasColumnType("text");
 
         builder.Property(e => e.Picture).HasColumnType("image");
     }

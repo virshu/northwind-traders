@@ -30,8 +30,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(e => e.UnitsOnOrder).HasDefaultValueSql("((0))");
 
-        builder.Property(e => e.Created).HasColumnType("datetime");
+        builder.Property(e => e.Created).HasColumnType("timestamp without time zone");
 
-        builder.Property(e => e.LastModified).HasColumnType("datetime");
+        builder.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
     }
 }

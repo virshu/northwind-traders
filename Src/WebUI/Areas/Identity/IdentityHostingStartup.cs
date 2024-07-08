@@ -7,6 +7,6 @@ public class IdentityHostingStartup : IHostingStartup
 {
     public void Configure(IWebHostBuilder builder)
     {
-        builder.ConfigureServices((context, services) => { });
+        builder.ConfigureServices((_, _) => { });
     }
 }

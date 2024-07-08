@@ -12,7 +12,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 
         builder.Property(e => e.Address).HasMaxLength(60);
 
-        builder.Property(e => e.BirthDate).HasColumnType("datetime");
+        builder.Property(e => e.BirthDate).HasColumnType("timestamp without time zone");
 
         builder.Property(e => e.City).HasMaxLength(15);
 
@@ -24,7 +24,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .IsRequired()
             .HasMaxLength(10);
 
-        builder.Property(e => e.HireDate).HasColumnType("datetime");
+        builder.Property(e => e.HireDate).HasColumnType("timestamp without time zone");
 
         builder.Property(e => e.HomePhone).HasMaxLength(24);
 
@@ -32,7 +32,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .IsRequired()
             .HasMaxLength(20);
 
-        builder.Property(e => e.Notes).HasColumnType("ntext");
+        builder.Property(e => e.Notes).HasColumnType("text");
 
         builder.Property(e => e.Photo).HasColumnType("image");
 
@@ -46,9 +46,9 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 
         builder.Property(e => e.TitleOfCourtesy).HasMaxLength(25);
 
-        builder.Property(e => e.Created).HasColumnType("datetime");
+        builder.Property(e => e.Created).HasColumnType("timestamp without time zone");
 
-        builder.Property(e => e.LastModified).HasColumnType("datetime");
+        builder.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
         builder.HasOne(d => d.Manager)
             .WithMany(p => p.DirectReports)

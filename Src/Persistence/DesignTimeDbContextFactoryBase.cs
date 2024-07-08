@@ -9,7 +9,7 @@ namespace Northwind.Persistence;
 public abstract class DesignTimeDbContextFactoryBase<TContext> :
     IDesignTimeDbContextFactory<TContext> where TContext : DbContext
 {
-    private const string ConnectionStringName = "NorthwindDatabase";
+    private const string ConnectionStringName = "NorthwindAuroraDatabase";
     private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
     public TContext CreateDbContext(string[] args)
@@ -48,7 +48,7 @@ public abstract class DesignTimeDbContextFactoryBase<TContext> :
 
         DbContextOptionsBuilder<TContext> optionsBuilder = new();
 
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseNpgsql(connectionString);
 
         return CreateNewInstance(optionsBuilder.Options);
     }

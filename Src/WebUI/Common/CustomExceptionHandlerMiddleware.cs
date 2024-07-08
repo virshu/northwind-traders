@@ -29,7 +29,7 @@ public class CustomExceptionHandlerMiddleware
         }
     }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         HttpStatusCode code = HttpStatusCode.InternalServerError;
 
@@ -45,7 +45,7 @@ public class CustomExceptionHandlerMiddleware
                 code = HttpStatusCode.BadRequest;
                 result = badRequestException.Message;
                 break;
-            case NotFoundException _:
+            case NotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
         }
@@ -64,8 +64,8 @@ public class CustomExceptionHandlerMiddleware
 
 public static class CustomExceptionHandlerMiddlewareExtensions
 {
-    public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
+    public static void UseCustomExceptionHandler(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
+        builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
     }
 }

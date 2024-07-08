@@ -13,7 +13,6 @@ public class DeleteCustomerCommandTests : CommandTestBase
     private readonly DeleteCustomerCommandHandler _sut;
 
     public DeleteCustomerCommandTests()
-        : base()
     {
         _sut = new DeleteCustomerCommandHandler(_context);
     }
@@ -21,7 +20,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     [Fact]
     public async Task Handle_GivenInvalidId_ThrowsNotFoundException()
     {
-        string invalidId = "INVLD";
+        const string invalidId = "INVLD";
 
         DeleteCustomerCommand command = new() { Id = invalidId };
 
@@ -31,7 +30,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     [Fact]
     public async Task Handle_GivenValidIdAndZeroOrders_DeletesCustomer()
     {
-        string validId = "JASON";
+        const string validId = "JASON";
 
         DeleteCustomerCommand command = new() { Id = validId };
 
@@ -45,7 +44,7 @@ public class DeleteCustomerCommandTests : CommandTestBase
     [Fact]
     public async Task Handle_GivenValidIdAndSomeOrders_ThrowsDeleteFailureException()
     {
-        string validId = "BREND";
+        const string validId = "BREND";
 
         DeleteCustomerCommand command = new() { Id = validId };
 
